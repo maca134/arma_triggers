@@ -12,18 +12,25 @@
 	Returns:
 	Array
 */
-
+private ['_players'];
 params [
 	['_position', [], [[]], [2,3]],
 	['_radius', -1, [0]]
 ];
 if (_position isEqualTo []) exitWith {};
 if (_radius isEqualTo -1) exitWith {};
+
+_players = [];
+{
+	if (alive _x && isPlayer _x && (_x distance2D _position) < _radius) then {
+		_players pushBack _x;
+	};
+} forEach allPlayers;
+
 _players = [
-	allPlayers,
-	[_position, _radius],
-	{_x distance2D _input0},
-	"ASCEND",
-	{_x distance2D _input0 < _input1}
+	_players,
+	[],
+	{owner _x}
 ] call BIS_fnc_sortBy;
+
 _players
